@@ -10,7 +10,6 @@ const MerchantStoreSchema = new Schema({
   accountName: {
     type: String,
     required: true,
-    unique: true,
   },
 
   accountNo: {

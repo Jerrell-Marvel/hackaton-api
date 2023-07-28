@@ -40,3 +40,29 @@ export const getMerchantStoreInfo = async (req, res) => {
 
   return res.json(merchantStoreInfo);
 };
+
+export const getAllMerchants = async (req, res) => {
+  const { uid, phoneNumber, gender, createTime, ktpId, updateTime, birthDate, email, username } = req.user;
+
+  const merchantStores = await MerchantStore.find({ accountName: username });
+
+  const result = [];
+
+  for (const merchantStore of merchantStores) {
+    const accountInfoResponse = await axios.post(
+      "http://34.101.154.14:8175/hackathon/bankAccount/info",
+      {
+        accountNo: merchantStore._doc.accountNo,
+      },
+      {
+        headers: {
+          Authorization: req.headers.authorization,
+        },
+      }
+    );
+
+    result.push({ ...merchantStore._doc, accountInfo: accountInfoResponse.data });
+  }
+
+  return res.json(result);
+};
