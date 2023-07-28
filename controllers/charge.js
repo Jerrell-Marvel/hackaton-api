@@ -44,5 +44,22 @@ export const charge = async (req, res) => {
     }
   );
 
+  if (amount >= 100000) {
+    const fee = (amount * 0.3) / 100;
+    const transactionFeeResponse = await axios.post(
+      "http://34.101.154.14:8175/hackathon/bankAccount/transaction/create",
+      {
+        senderAccountNo: receiverAccountNo,
+        receiverAccountNo: "5859452266220981",
+        amount: fee,
+      },
+      {
+        headers: {
+          Authorization: authorization,
+        },
+      }
+    );
+  }
+
   return res.json(transaction.data);
 };
