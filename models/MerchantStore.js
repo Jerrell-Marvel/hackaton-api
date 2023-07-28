@@ -24,6 +24,12 @@ const MerchantStoreSchema = new Schema({
     default: false,
   },
 
+  qrCodeImg: {
+    type: String,
+    required: true,
+    default: "alternate.png",
+  },
+
   assets: {
     type: [String],
     default: [],

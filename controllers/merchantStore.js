@@ -2,7 +2,11 @@ import axios from "axios";
 import { MerchantStore } from "../models/MerchantStore.js";
 import { NotFoundError } from "../errors/NotFoundError.js";
 
-export const createMerchantStore = async (req, res) => {
+import qr from "qrcode";
+import fs from "fs";
+import { InternalServerError } from "../errors/InternalServerError.js";
+
+export const createMerchantStore = async (req, res, next) => {
   const { name } = req.body;
   const { authorization } = req.headers;
 
@@ -25,7 +29,39 @@ export const createMerchantStore = async (req, res) => {
     accountNo,
   });
 
-  return res.json(merchantStore);
+  // Create qrcode
+  let url = `localhost:3000/charge/${merchantStore._id}`;
+
+  qr.toDataURL(url, { type: "image/png" }, function (err, qrCodeData) {
+    if (err) {
+      return next(new InternalServerError("fail to process qr code"));
+    }
+
+    const imageFileName = `${Date.now()}_${merchantStore._id}.png`;
+
+    const imagePath = `./public/${imageFileName}`;
+    fs.writeFile(imagePath, qrCodeData.replace(/^data:image\/png;base64,/, ""), "base64", async (err) => {
+      if (err) {
+        return next(new InternalServerError("fail to process qr code"));
+      }
+
+      const updatedMerchantStore = await MerchantStore.findOneAndUpdate(
+        {
+          name,
+          accountName,
+          accountNo,
+        },
+        {
+          qrCodeImg: imageFileName,
+        },
+        {
+          new: true,
+        }
+      );
+
+      return res.json(updatedMerchantStore);
+    });
+  });
 };
 
 export const getMerchantStoreInfo = async (req, res) => {

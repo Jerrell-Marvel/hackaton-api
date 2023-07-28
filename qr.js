@@ -1,12 +1,6 @@
 import qr from "qrcode";
 import fs from "fs";
 
-// let data = {
-//   name: "chris",
-//   email: "christianhadinata@gmail.com",
-// };
-
-// let stJson = JSON.stringify(data);
 let stJson = "www.google.com";
 
 const saveQRCode = (qrCodeData, fileName) => {
