@@ -7,8 +7,6 @@ import { WebProductItem } from "../models/WebProductItem.js";
 export const createWeb = async (req, res) => {
   const { merchantStoreId } = req.params;
 
-  //   console.log(req.files);
-
   const { uid, phoneNumber, gender, createTime, ktpId, updateTime, birthDate, email, username } = req.user;
 
   const { mainHeader, mainDescription, address, openSchedule, phoneNumber: webPhoneNumber, twitter, instagram, facebook, whatsapp, products } = req.body;
@@ -21,9 +19,11 @@ export const createWeb = async (req, res) => {
 
   const web = await Web.create({ merchantStoreId, mainHeader, mainDescription, address, openSchedule, phoneNumber: webPhoneNumber, twitter, instagram, facebook, whatsapp, mainImg: req.files["main-banner-img"][0].filename });
 
+  const productsJSON = JSON.parse(products);
+
   let i = 0;
   for (const file of req.files["product-img"]) {
-    const webProductItem = await WebProductItem.create({ webId: web._id, imgUrl: file.filename, name: products[i].name, description: products[i].description });
+    const webProductItem = await WebProductItem.create({ webId: web._id, imgUrl: file.filename, name: productsJSON[i].name, description: productsJSON[i].description });
     i++;
   }
 

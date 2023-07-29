@@ -4,7 +4,7 @@ import { createMerchantStore, getAllMerchants, getMerchantStoreInfo } from "../c
 const router = express.Router();
 
 router.post("/merchantStore", createMerchantStore);
-router.get("/merchantStore/:merchantStoreId", getMerchantStoreInfo);
+router.get("/merchantStore/:name", getMerchantStoreInfo);
 router.get("/merchantStore", authMiddleware, getAllMerchants);
 
 export default router;

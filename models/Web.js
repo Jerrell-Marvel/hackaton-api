@@ -4,6 +4,7 @@ const WebSchema = new Schema({
   merchantStoreId: {
     type: mongoose.Types.ObjectId,
     ref: "MerchantStore",
+    unique: true,
     required: true,
   },
   mainHeader: {

@@ -65,16 +65,31 @@ export const createMerchantStore = async (req, res, next) => {
 };
 
 export const getMerchantStoreInfo = async (req, res) => {
-  const { merchantStoreId } = req.params;
+  const { name } = req.params;
+  console.log(name);
   const merchantStoreInfo = await MerchantStore.findOne({
-    _id: merchantStoreId,
+    name: `${name}`,
   });
+  // console.log(merchantStoreInfo);
 
   if (!merchantStoreInfo) {
-    throw new NotFoundError("Merchant Store Info Not Found");
+    throw new NotFoundError("merchant store info not found");
   }
 
-  return res.json(merchantStoreInfo);
+  const { authorization } = req.headers;
+  const accountInfo = await axios.post(
+    "http://34.101.154.14:8175/hackathon/bankAccount/info",
+    { accountNo: merchantStoreInfo.accountNo },
+    {
+      headers: {
+        Authorization: authorization,
+      },
+    }
+  );
+  const balance = accountInfo.data.data.balance;
+  // console.log(balance);
+
+  return res.json({ ...merchantStoreInfo._doc, balance });
 };
 
 export const getAllMerchants = async (req, res) => {

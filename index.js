@@ -27,6 +27,7 @@ import cors from "cors";
 import merchantStoreRoutes from "./routes/merchantStore.js";
 import chargeRoutes from "./routes/charge.js";
 import webRoutes from "./routes/web.js";
+import analyticRoutes from "./routes/analytic.js";
 
 // Parse json
 app.use(express.json());
@@ -44,6 +45,7 @@ import axios from "axios";
 app.use("/", merchantStoreRoutes);
 app.use("/", chargeRoutes);
 app.use("/", webRoutes);
+app.use("/", analyticRoutes);
 
 app.get("/", async (req, res) => {
   return res.json("ngo");
