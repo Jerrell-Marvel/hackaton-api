@@ -77,6 +77,8 @@ export const getMerchantStoreInfo = async (req, res) => {
   }
 
   const { authorization } = req.headers;
+
+  //   console.log(authorization);
   const accountInfo = await axios.post(
     "http://34.101.154.14:8175/hackathon/bankAccount/info",
     { accountNo: merchantStoreInfo.accountNo },
