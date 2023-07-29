@@ -23,7 +23,7 @@ export const createWeb = async (req, res) => {
 
   let i = 0;
   for (const file of req.files["product-img"]) {
-    const webProductItem = await WebProductItem.create({ webId: web._id, imgUrl: file.filename, name: productsJSON[i].name, description: productsJSON[i].description });
+    const webProductItem = await WebProductItem.create({ webId: web._id, imgUrl: file.filename, name: productsJSON[i].name, description: productsJSON[i].description, price: productsJSON[i].price });
     i++;
   }
 

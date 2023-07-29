@@ -32,6 +32,8 @@ import analyticRoutes from "./routes/analytic.js";
 // Parse json
 app.use(express.json());
 
+app.use(express.static("public"));
+
 app.use(
   cors({
     credentials: true,
